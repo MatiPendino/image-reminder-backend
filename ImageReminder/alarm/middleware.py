@@ -7,9 +7,9 @@ class DeviceIdentifierMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        print("fefe")
         device_uuid = request.headers.get('Device-ID')
         if device_uuid:
+            print("??")
             alarm_user, created = AlarmUser.objects.get_or_create(device_uuid=device_uuid)
             request.alarm_user = alarm_user
         else:
