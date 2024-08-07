@@ -6,5 +6,7 @@ router = DefaultRouter()
 router.register(r'', AlarmViewset)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('register_device/', RegisterDevice.as_view()),
+    path('sent_nots/', NotifyUsers.as_view()),
+    path('', include(router.urls)),
 ]

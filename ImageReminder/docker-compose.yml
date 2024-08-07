@@ -1,0 +1,12 @@
+version: '3.12'
+
+services:
+  app:
+    build: .
+    volumes:
+      - .:/imagereminder
+    ports:
+      - 8000:8000
+    image: app:imagereminder
+    container_name: image_reminder_container
+    command: python manage.py runserver 0.0.0.0:8000

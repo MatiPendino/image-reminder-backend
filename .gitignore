@@ -164,3 +164,11 @@ cython_debug/
 # Media
 */media
 /media
+
+# Firebase file
+*/photo-reminder.json
+photo-reminder.json
+alarm/photo-reminder.*
+*/photo-reminder.*
+image-reminder-backend/ImageReminder/alarm/photo-reminder.json
+image-reminder-backend/ImageReminder/alarm/photo-reminder.*
