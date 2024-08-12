@@ -3,10 +3,9 @@ from rest_framework.routers import DefaultRouter
 from .views import *
 
 router = DefaultRouter()
-router.register(r'', AlarmViewset)
+router.register(r'alarm', AlarmViewset)
 
 urlpatterns = [
-    path('register_device/', RegisterDevice.as_view()),
-    path('sent_nots/', NotifyUsers.as_view()),
+    path('register_device/', RegisterDevice.as_view(), name='register_device'),
     path('', include(router.urls)),
 ]
