@@ -13,7 +13,8 @@ DEBUG = bool(int(config('DEBUG')))
 ALLOWED_HOSTS = [
     '192.168.20.51',
     '127.0.0.1',
-    '147.182.222.10'
+    '147.182.222.10',
+    'imagereminder.top'
 ]
 
 # Application definition
