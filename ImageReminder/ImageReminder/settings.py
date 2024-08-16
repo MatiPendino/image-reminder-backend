@@ -147,7 +147,7 @@ USE_TZ = True
 
 
 # Static and media files
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 if bool(int(config('DEBUG'))):
     STATICFILES_DIRS = [
         BASE_DIR / 'static',
