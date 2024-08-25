@@ -30,6 +30,7 @@ def check_and_send_alarms():
         time__hour=current_hour,
         time__minute=current_minute
     )
+    print(alarms)
 
     expo_push_client = PushClient()
     title = "PhotoReminder"
@@ -40,11 +41,14 @@ def check_and_send_alarms():
         # If the current weekday matches one of the alarm weekdays list, the push message is sent
         for day in weekdays:
             if day['full'] == current_weekday:
+                print("aca tambien llego")
                 alarm_user = alarm.alarm_user
+                print(alarm_user)
                 devices = FCMDevice.objects.filter(name=alarm_user.device_uuid)
 
                 for device in devices:
                     token = device.registration_id
+                    print(token)
                     if not token.startswith('ExponentPushToken'):
                         print(f'Invalid token: {token}')
                         continue
@@ -58,8 +62,10 @@ def check_and_send_alarms():
                             data={'alarm_id': alarm.id}
                         )
                     )
+                    print("proceso terminado bien")
 
     # Send messages
     if messages:
+        print("hasta aca piola")
         response = expo_push_client.publish_multiple(messages)
         print("Push notifications sent successfully!")
