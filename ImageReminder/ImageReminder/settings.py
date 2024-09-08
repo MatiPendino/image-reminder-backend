@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from decouple import config
 from celery.schedules import crontab
+import sentry_sdk
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -133,6 +134,18 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*'),
     },
 }
+
+# Sentry settings
+sentry_sdk.init(
+    dsn=f'https://{config('SENTRY_URL')}.ingest.us.sentry.io/{config('SENTRY_KEY')}',
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
