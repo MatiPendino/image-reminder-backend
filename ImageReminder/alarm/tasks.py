@@ -1,3 +1,4 @@
+import sentry_sdk
 from celery import shared_task
 from datetime import datetime
 from exponent_server_sdk import PushClient, PushMessage
@@ -21,7 +22,7 @@ def check_and_send_alarms():
         a push notification
     '''
     # Alarm filter by hour and minute
-    # now = datetime.now().time()
+    sentry_sdk.capture_message("Starting check_and_send_alarms task")
     now = datetime.now()
     current_hour = now.hour
     current_minute = now.minute
@@ -30,7 +31,7 @@ def check_and_send_alarms():
         time__hour=current_hour,
         time__minute=current_minute
     )
-    print(alarms)
+    sentry_sdk.capture_message(f"Alarms found: {alarms}")
 
     expo_push_client = PushClient()
     title = "PhotoReminder"
@@ -41,16 +42,16 @@ def check_and_send_alarms():
         # If the current weekday matches one of the alarm weekdays list, the push message is sent
         for day in weekdays:
             if day['full'] == current_weekday:
-                print("aca tambien llego")
+                sentry_sdk.capture_message(f"aca tambien llego")
                 alarm_user = alarm.alarm_user
-                print(alarm_user)
+                sentry_sdk.capture_message(alarm_user)
                 devices = FCMDevice.objects.filter(name=alarm_user.device_uuid)
 
                 for device in devices:
                     token = device.registration_id
-                    print(token)
+                    sentry_sdk.capture_message(token)
                     if not token.startswith('ExponentPushToken'):
-                        print(f'Invalid token: {token}')
+                        sentry_sdk.capture_message(f'Invalid token: {token}')
                         continue
 
                     body = f'Don’t forget to watch your {alarm.title} photo!'
@@ -62,10 +63,10 @@ def check_and_send_alarms():
                             data={'alarm_id': alarm.id}
                         )
                     )
-                    print("proceso terminado bien")
+                    sentry_sdk.capture_message(f'proceso terminado bien')
 
     # Send messages
     if messages:
-        print("hasta aca piola")
+        sentry_sdk.capture_message(f'messages found')
         response = expo_push_client.publish_multiple(messages)
-        print("Push notifications sent successfully!")
+        sentry_sdk.capture_message(f'Push notifications sent successfully!')

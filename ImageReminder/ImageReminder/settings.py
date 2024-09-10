@@ -3,6 +3,8 @@ from pathlib import Path
 from decouple import config
 from celery.schedules import crontab
 import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -141,10 +143,12 @@ sentry_sdk.init(
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for tracing.
     traces_sample_rate=1.0,
+    integrations=[DjangoIntegration(), CeleryIntegration()],
     # Set profiles_sample_rate to 1.0 to profile 100%
     # of sampled transactions.
     # We recommend adjusting this value in production.
     profiles_sample_rate=1.0,
+    send_default_pii=True,
 )
 
 # Internationalization
