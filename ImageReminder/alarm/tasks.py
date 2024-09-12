@@ -22,7 +22,6 @@ def check_and_send_alarms():
         a push notification
     '''
     # Alarm filter by hour and minute
-    sentry_sdk.capture_message("Starting check_and_send_alarms task")
     now = datetime.now()
     current_hour = now.hour
     current_minute = now.minute
@@ -31,7 +30,6 @@ def check_and_send_alarms():
         time__hour=current_hour,
         time__minute=current_minute
     )
-    sentry_sdk.capture_message(f"Alarms found: {alarms}")
 
     expo_push_client = PushClient()
     title = "PhotoReminder"
@@ -42,14 +40,11 @@ def check_and_send_alarms():
         # If the current weekday matches one of the alarm weekdays list, the push message is sent
         for day in weekdays:
             if day['full'] == current_weekday:
-                sentry_sdk.capture_message(f"aca tambien llego")
                 alarm_user = alarm.alarm_user
-                sentry_sdk.capture_message(alarm_user)
                 devices = FCMDevice.objects.filter(name=alarm_user.device_uuid)
 
                 for device in devices:
                     token = device.registration_id
-                    sentry_sdk.capture_message(token)
                     if not token.startswith('ExponentPushToken'):
                         sentry_sdk.capture_message(f'Invalid token: {token}')
                         continue
@@ -63,10 +58,7 @@ def check_and_send_alarms():
                             data={'alarm_id': alarm.id}
                         )
                     )
-                    sentry_sdk.capture_message(f'proceso terminado bien')
 
     # Send messages
     if messages:
-        sentry_sdk.capture_message(f'messages found')
         response = expo_push_client.publish_multiple(messages)
-        sentry_sdk.capture_message(f'Push notifications sent successfully!')

@@ -26,7 +26,7 @@ class AlarmViewset(viewsets.ModelViewSet):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         except Exception as e:
-            print(str(e))
+            capture_message(str(e), level="error")
             return Response({'error': 'Error processing the request'}, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
@@ -42,7 +42,7 @@ class AlarmViewset(viewsets.ModelViewSet):
 
             return Response(serializer.data)
         except Exception as e:
-            print(str(e))
+            capture_message(str(e), level="error")
             return Response({'error': 'Error processing the request'}, status=status.HTTP_400_BAD_REQUEST)
 
 

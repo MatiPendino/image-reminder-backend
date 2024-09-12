@@ -15,5 +15,4 @@ class DeviceIdentifierMiddleware:
             request.alarm_user = alarm_user
 
         response = self.get_response(request)
-        print(response)
         return response

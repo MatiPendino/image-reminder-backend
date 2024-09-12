@@ -1,3 +1,4 @@
+import sentry_sdk
 from django.core.management.base import BaseCommand
 from fcm_django.models import FCMDevice
 from firebase_admin import credentials
@@ -10,7 +11,6 @@ from alarm.models import AlarmUser, Alarm
 # Ensure Firebase is initialized
 if not firebase_admin._apps:
     cred = credentials.Certificate('alarm/photo-reminder.json')
-    print(cred)
     firebase_admin.initialize_app(cred)
 
 
@@ -25,7 +25,7 @@ class Command(BaseCommand):
             for device in devices:
                 token = device.registration_id
                 if not token.startswith('ExponentPushToken'):
-                    print(f'Invalid token: {token}')
+                    sentry_sdk.capture_message(f'Invalid token: {token}', level="error")
                     continue
 
                 alarm_user = AlarmUser.objects.filter(device_uuid=device.name).first()
@@ -43,6 +43,6 @@ class Command(BaseCommand):
                     
             # Send messages
             response = expo_push_client.publish_multiple(messages)
-            print("push notifications sent successfully!")
         except (PushServerError, DeviceNotRegisteredError, InvalidCredentialsError) as exc:
             print("There was an error sending the push notifications")
+            sentry_sdk.capture_message(f"{str(exc)}", level='error')
