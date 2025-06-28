@@ -1,12 +1,13 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from fcm_django.models import FCMDevice
+# from fcm_django.models import FCMDevice
 from sentry_sdk import capture_message, set_context
+from notification.models import FCMToken
 from .models import Alarm
 from .serializers import AlarmSerializer
 
-class AlarmViewset(viewsets.ModelViewSet):
+class AlarmViewSet(viewsets.ModelViewSet):
     queryset = Alarm.objects.all()
     serializer_class = AlarmSerializer
 
@@ -50,28 +51,16 @@ class RegisterDevice(APIView):
     def post(self, request):
         token = request.data.get('token')
         if not token:
-            set_context("Request Details", {
-                "request_data": request.data,
-                "error": "Token is required"
-            })
-            capture_message("Token is missing in RegisterDevice API", level="error")
-            return Response({"error": "Token is required"}, status=status.HTTP_400_BAD_REQUEST)
+            raise ValueError('Token is required')
 
         if not request.alarm_user:
-            set_context("Request Details", {
-                "request_data": request.data,
-                "alarm_user": str(request.alarm_user),
-                "error": "Alarm user not found"
-            })
-            capture_message("Alarm user not found in RegisterDevice API", level="error")
-            return Response({"error": "Alarm user not found"}, status=status.HTTP_400_BAD_REQUEST)
+            raise ValueError('Alarm user is required')
         
-        device, created = FCMDevice.objects.get_or_create(
-            registration_id=token,
+        device, created = FCMToken.objects.get_or_create(
+            token_id=token,
             defaults={
-                'name': request.alarm_user.device_uuid,
                 'device_id': str(request.alarm_user.device_uuid),
-                'type': 'android'
+                'type': FCMToken.ANDROID
             }
         )
         if not created:

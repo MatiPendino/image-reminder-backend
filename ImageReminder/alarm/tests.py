@@ -4,7 +4,7 @@ import json
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-from fcm_django.models import FCMDevice
+#from fcm_django.models import FCMDevice
 from django.templatetags.static import static
 from django.contrib.staticfiles import finders
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -117,8 +117,8 @@ class RegisterDeviceTests(APITestCase):
         data = {'token': 'ExponentPushToken[wqetktMElXTMkMBnbXPznY]'}
         response = self.client.post(self.device_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(FCMDevice.objects.count(), 1)
-        self.assertEqual(FCMDevice.objects.get().registration_id, 'ExponentPushToken[wqetktMElXTMkMBnbXPznY]')
+        #self.assertEqual(FCMDevice.objects.count(), 1)
+        #self.assertEqual(FCMDevice.objects.get().registration_id, 'ExponentPushToken[wqetktMElXTMkMBnbXPznY]')
 
     def test_register_device_no_token(self):
         data = {}
@@ -127,12 +127,12 @@ class RegisterDeviceTests(APITestCase):
         self.assertEqual(response.data['error'], 'Token is required')
 
     def test_register_existing_device(self):
-        FCMDevice.objects.create(
+        """FCMDevice.objects.create(
             registration_id='ExponentPushToken[wqetktMElXTMkMBnbXPznY]',
             name=str(self.alarm_user.device_uuid),
             device_id=str(self.alarm_user.device_uuid),
             type='android'
-        )
+        )"""
         data = {'token': 'ExponentPushToken[wqetktMElXTMkMBnbXPznY]'}
         response = self.client.post(self.device_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

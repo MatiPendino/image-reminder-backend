@@ -17,6 +17,8 @@ ALLOWED_HOSTS = [
     '192.168.20.51',
     '127.0.0.1',
     '147.182.222.10',
+    '192.168.0.188',
+    '172.20.10.8',
     'imagereminder.top',
     '*.imagereminder.top',
 ]
@@ -32,10 +34,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'import_export',
     'corsheaders',
-    'fcm_django',
     'django_celery_beat',
     'django_celery_results',
-    'alarm'
+    'alarm',
+    'notification',
 ]
 
 MIDDLEWARE = [
@@ -116,11 +118,6 @@ REST_FRAMEWORK = {
     )
 }
 
-# Firebase Cloud Messaging
-FCM_DJANGO_SETTINGS = {
-    "FCM_SERVER_KEY": config('FCM_SERVER_KEY')
-}
-
 # Celery
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
@@ -140,13 +137,8 @@ CELERY_BEAT_SCHEDULE = {
 # Sentry settings
 sentry_sdk.init(
     dsn=f'https://{config('SENTRY_URL')}.ingest.us.sentry.io/{config('SENTRY_KEY')}',
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for tracing.
     traces_sample_rate=1.0,
     integrations=[DjangoIntegration(), CeleryIntegration()],
-    # Set profiles_sample_rate to 1.0 to profile 100%
-    # of sampled transactions.
-    # We recommend adjusting this value in production.
     profiles_sample_rate=1.0,
     send_default_pii=True,
 )
