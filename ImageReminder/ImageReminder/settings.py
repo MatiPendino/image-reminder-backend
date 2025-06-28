@@ -125,20 +125,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
-
-# Celery Beat 
-"""CELERY_BEAT_SCHEDULE = {
-    'check-and-send-alarms-every-minute': {
-        'task': 'alarm.tasks.check_and_send_alarms',
-        'schedule': crontab(minute='*'),
-    },
-}"""
-
-# Celery Settings
-#CELERY_BROKER_URL = "redis://redis:6379/0"
-#CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
-#CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes
 CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 minutes
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
