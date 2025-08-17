@@ -13,15 +13,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = bool(int(config('DEBUG')))
 
-ALLOWED_HOSTS = [
-    '192.168.20.51',
-    '127.0.0.1',
-    '147.182.222.10',
-    '192.168.0.188',
-    '172.20.10.8',
-    'imagereminder.top',
-    '*.imagereminder.top',
-]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 # Application definition
 INSTALLED_APPS = [
