@@ -128,7 +128,7 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 # Sentry settings
 sentry_sdk.init(
-    dsn=f'https://{config('SENTRY_URL')}.ingest.us.sentry.io/{config('SENTRY_KEY')}',
+    dsn=f"https://{config('SENTRY_URL')}.ingest.us.sentry.io/{config('SENTRY_KEY')}",
     traces_sample_rate=1.0,
     integrations=[DjangoIntegration(), CeleryIntegration()],
     profiles_sample_rate=1.0,
