@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 from decouple import config
-from celery.schedules import crontab
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -42,13 +41,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:19000", 
-    "http://127.0.0.1:19000", 
-    "http://localhost:8081", 
-    "http://127.0.0.1:8081", 
 ]
 
 ROOT_URLCONF = 'ImageReminder.urls'
@@ -119,8 +111,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
-CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes
-CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 minutes
+CELERY_TASK_TIME_LIMIT = 30*60  # 30 minutes
+CELERY_TASK_SOFT_TIME_LIMIT = 25*60  # 25 minutes
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 CELERY_WORKER_MAX_TASKS_PER_CHILD = 1000
 CELERY_BROKER_CONNECTION_MAX_RETRIES = 0

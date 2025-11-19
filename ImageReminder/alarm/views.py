@@ -1,9 +1,6 @@
+from sentry_sdk import capture_message
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
-# from fcm_django.models import FCMDevice
-from sentry_sdk import capture_message, set_context
-from notification.models import FCMToken
 from .models import Alarm
 from .serializers import AlarmSerializer
 
@@ -45,27 +42,3 @@ class AlarmViewSet(viewsets.ModelViewSet):
         except Exception as e:
             capture_message(str(e), level="error")
             return Response({'error': 'Error processing the request'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class RegisterDevice(APIView):
-    def post(self, request):
-        token = request.data.get('token')
-        if not token:
-            raise ValueError('Token is required')
-
-        if not request.alarm_user:
-            raise ValueError('Alarm user is required')
-        
-        device, created = FCMToken.objects.get_or_create(
-            token_id=token,
-            defaults={
-                'device_id': str(request.alarm_user.device_uuid),
-                'type': FCMToken.ANDROID
-            }
-        )
-        if not created:
-            device.registration_id = token
-            device.save()
-            return Response({"message": "Device already registered"}, status=status.HTTP_200_OK)
-        
-        return Response({"message": "Device registered successfully"}, status=status.HTTP_201_CREATED)

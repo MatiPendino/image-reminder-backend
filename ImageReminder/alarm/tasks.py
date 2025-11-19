@@ -1,4 +1,3 @@
-import sentry_sdk
 from celery import shared_task
 from datetime import datetime
 from notification.models import FCMToken
