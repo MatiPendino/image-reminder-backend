@@ -48,6 +48,8 @@ def check_and_send_alarms():
                         "type": "alarm",         
                         "alarm_id": str(alarm.id),
                         "title": alarm.title,
+                        "image": alarm.image.url if alarm.image else "",
+                        "time": alarm.time.strftime("%H:%M"),
                         "route": "AlarmScreen"
                     }
                     fcm.notify(
