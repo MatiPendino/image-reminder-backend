@@ -28,7 +28,7 @@ def check_and_send_alarms():
     alarms = Alarm.objects.filter(
         time__hour=current_hour,
         time__minute=current_minute
-    )
+    ).select_related('alarm_user')
 
     fcm = get_fcm_object()
     notification_title = 'Alarm Notification'
