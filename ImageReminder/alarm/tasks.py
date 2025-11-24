@@ -1,5 +1,5 @@
 from celery import shared_task
-from datetime import datetime
+from django.utils import timezone
 from notification.models import FCMToken
 from notification.utils import get_fcm_object
 from .models import Alarm
@@ -21,13 +21,11 @@ def check_and_send_alarms():
         a push notification
     """
     # Alarm filter by hour and minute
-    now = datetime.now()
-    current_hour = now.hour
-    current_minute = now.minute
+    now = timezone.now()
     current_weekday = WEEKDAYS_MAP[now.weekday()]
+    current_time = now.replace(second=0, microsecond=0).time()
     alarms = Alarm.objects.filter(
-        time__hour=current_hour,
-        time__minute=current_minute
+        time=current_time
     ).select_related('alarm_user')
 
     fcm = get_fcm_object()
