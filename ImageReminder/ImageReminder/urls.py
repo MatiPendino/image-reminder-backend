@@ -1,3 +1,4 @@
+from decouple import config
 from django.conf import settings
 from django.views.static import serve
 from django.contrib import admin
@@ -11,7 +12,7 @@ admin.site.site_title = 'ImageReminder Admin Portal'
 admin.site.index_title = 'Welcome to the ImageReminder Portal'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(config('ADMIN_URL', 'admin/'), admin.site.urls),
     path('alarms/', include(alarm_urls)),
     path('notifications/', include(notification_urls)),
 ]

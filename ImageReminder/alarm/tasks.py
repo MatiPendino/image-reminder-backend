@@ -31,6 +31,8 @@ def check_and_send_alarms():
     fcm = get_fcm_object()
     notification_title = 'Alarm Notification'
 
+    invalid_tokens = []
+
     for alarm in alarms:
         weekdays = alarm.weekdays
         # If the current weekday matches one of the alarm weekdays list, the push message is sent
@@ -49,9 +51,16 @@ def check_and_send_alarms():
                         "time": alarm.time.strftime("%H:%M"),
                         "route": "AlarmScreen"
                     }
-                    fcm.notify(
-                        fcm_token=fcm_token.token_id, 
-                        notification_title=notification_title, 
-                        notification_body=notification_body,
-                        data_payload=data
-                    )
+                    try:
+                        fcm.notify(
+                            fcm_token=fcm_token.token_id, 
+                            notification_title=notification_title, 
+                            notification_body=notification_body,
+                            data_payload=data
+                        )
+                    except:
+                        invalid_tokens.append(fcm_token.id)
+
+    # Delete invalid tokens
+    if invalid_tokens:
+        FCMToken.objects.filter(id__in=invalid_tokens).delete()
