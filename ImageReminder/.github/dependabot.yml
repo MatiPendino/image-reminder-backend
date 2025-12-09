@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+    ignore:
+      - dependency-name: "Django"
+        update-types: ["version-update:semver-major"]
